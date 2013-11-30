@@ -6,8 +6,8 @@
 #pragma userControlDuration(45)
 
 
-#DEFINE DIRECTION 1 // 1 if blue, -1 if red
-#DEFINE BUFFER_DISTANCE 3
+#define DIRECTION 1 // 1 if blue, -1 if red
+#define BUFFER_DISTANCE 3
 
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
 
