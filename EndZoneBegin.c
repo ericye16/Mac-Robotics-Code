@@ -5,8 +5,8 @@
 #pragma autonomousDuration(15)
 #pragma userControlDuration(105)
 
-#DEFINE DIRECTION 1 // 1 if blue, -1 if red
-#DEFINE BUFFER_DISTANCE 3
+#DEFINE DIRECTION 1; // 1 if blue, -1 if red
+#DEFINE BUFFER_DISTANCE 3;
 
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
 
@@ -42,6 +42,7 @@ task autonomous()
 {
 //begin facing hanging bars, assuming initially in low-scoring zone
 //assumptions: arm can knock big balls off barrier, arm cannot rotate, arm cannot affect location of robot
+	//check for line
 	moveStraight(24 + BUFFER_DISTANCE);
 	//pick up balls
 	moveStraight(-BUFFER_DISTANCE);
@@ -57,6 +58,7 @@ task autonomous()
 	moveStraight(BUFFER_DISTANCE);
 	//knock big ball over
 	//retract arm
+	//check for line
 	moveStraight(24);
 	turn(-45*DIRECTION);
 	//begin moving balls up

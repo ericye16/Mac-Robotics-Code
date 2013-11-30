@@ -54,6 +54,7 @@ task autonomous()
 	//retract arm
 	moveStraight(-BUFFER_DISTANCE);
 	turn(90 * DIRECTION);
+	//check for line
 	moveStraight(12);
 	turn(-90 * DIRECTION);
 	moveStraight(60 + BUFFER_DISTANCE);
