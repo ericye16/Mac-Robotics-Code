@@ -1,6 +1,7 @@
 #pragma config(Sensor, dgtl1,  leftMotorEncoder, sensorRotation)
 #pragma config(Sensor, dgtl2,  rightMotorEncoder, sensorRotation)
 #pragma config(Sensor, dgtl3,  bottomLimitSwitch, sensorTouch)
+#pragma config(Sensor, dgtl4,  topLimitSwitch, sensorTouch)
 #pragma config(Motor,  port1,           frontLeftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port2,           backLeftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port3,           leftArm1,      tmotorServoContinuousRotation, openLoop)
@@ -50,7 +51,11 @@ task main()
 		motor[frontLeftMotor] = vexRT[Ch3];
 		motor[backLeftMotor]  = vexRT[Ch3];
 		if (vexRT[Btn6U] == 1) {
-			setArmsAt(ARM_POWER_HIGH);
+			if (SensorValue[topLimitSwitch] == 0) {
+				setArmsAt(ARM_POWER_HIGH);
+			} else {
+				setArmsAt(0);
+			}
 		} else if (vexRT[Btn6D] == 1) {
 			if (SensorValue[bottomLimitSwitch] == 0) {
 				setArmsAt(-ARM_POWER_HIGH);
