@@ -1,6 +1,7 @@
 #pragma config(Sensor, dgtl1,  leftMotorEncoder, sensorRotation)
 #pragma config(Sensor, dgtl2,  rightMotorEncoder, sensorRotation)
 #pragma config(Sensor, dgtl3,  bottomLimitSwitch, sensorTouch)
+#pragma config(Sensor, dgtl4, topLimitSwitch, sensorTouch)
 #pragma config(Motor,  port1,           frontLeftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port2,           backLeftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port3,           leftArm1,      tmotorServoContinuousRotation, openLoop)
@@ -56,6 +57,7 @@ void moveStraight(float inches) {
 			This code (c) 2013 some dudes on the internet
 		*/
 		error = leftEncoder - rightEncoder - beginError;
+		if (inches < 0) error *= -1;
 		adjustSlaveMotor(error * KP);
 		wait1Msec(1);
 	}
@@ -67,14 +69,37 @@ void turn(int degrees) {
 
 }
 
-void releaseTheFlag() {
+void raiseTheFlag() {
 	motor[conveyer] = -50;
 	wait10Msec(30);
 	motor[conveyer] = 0;
 }
+void setArmsAt(int power) {
+	motor[rightArm1] = power;
+	motor[rightArm2] = power;
+	motor[leftArm1] = -power;
+	motor[leftArm2] = -power;
+}
+task setArmUp() {
+	setArmsAt(ARM_POWER_HIGH);
+	while (!SensorValue[topLimitSwitch]);
+	setArmsAt(-127);
+	wait1Msec(10);
+	setArmsAt(0);
+}
+
+task setArmDown() {
+	setArmsAt(-ARM_POWER_HIGH);
+	while (!SensorValue[bottomLimitSwitch]);
+	setArmsAt(127);
+	wait1Msec(10);
+	setArmsAt(0);
+}
 task main()
 {
+	raiseTheFlag();
+	StartTask(setArmUp, 7);
 	moveStraight(50);
-
-
+	StartTask(setArmDown, 7);
+	moveStraight(-50);
 }

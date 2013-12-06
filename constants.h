@@ -4,3 +4,6 @@
 #define WHEEL_FUDGE_FACTOR 2.5
 #define ROBOT_WIDTH 14.5 //inches
 #define ROBOT_RADIUS ROBOT_WIDTH / 2 //inches
+
+#define ARM_POWER_HIGH 60
+#define CONVEYOR_POWER 127

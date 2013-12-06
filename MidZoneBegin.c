@@ -1,6 +1,7 @@
 #pragma config(Sensor, dgtl1,  leftMotorEncoder, sensorRotation)
 #pragma config(Sensor, dgtl2,  rightMotorEncoder, sensorRotation)
 #pragma config(Sensor, dgtl3,  bottomLimitSwitch, sensorTouch)
+#pragma config(Sensor, dgtl4, topLimitSwitch, sensorTouch)
 #pragma config(Motor,  port1,           frontLeftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port2,           backLeftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port3,           leftArm1,      tmotorServoContinuousRotation, openLoop)
