@@ -80,6 +80,18 @@ void setArmsAt(int power) {
 	motor[leftArm1] = -power;
 	motor[leftArm2] = -power;
 }
+
+void startConveyor() {
+	motor[conveyer] = CONVEYOR_POWER;
+}
+
+void stopConveyor() {
+	motor[conveyer] = 0;
+}
+
+void reverseConveyor() {
+	motor[conveyer] = -CONVEYOR_POWER;
+}
 task setArmUp() {
 	setArmsAt(ARM_POWER_HIGH);
 	while (!SensorValue[topLimitSwitch]);
@@ -98,8 +110,12 @@ task setArmDown() {
 task main()
 {
 	raiseTheFlag();
-	StartTask(setArmUp, 7);
+	startConveyor();
+	//StartTask(setArmUp, 7);
 	moveStraight(50);
-	StartTask(setArmDown, 7);
+	StartTask(setArmUp, 7);
 	moveStraight(-50);
+	reverseConveyor();
+	while(true);
+
 }
