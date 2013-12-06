@@ -17,7 +17,7 @@
 #define DIRECTION 1 // 1 if blue, -1 if red
 #define BUFFER_DISTANCE 3
 #define MOTOR_POWER 100
-#define KP 500
+#define KP 5
 
 void locomoteAll(int power) {
 	motor[frontLeftMotor] = power;
@@ -27,16 +27,18 @@ void locomoteAll(int power) {
 }
 
 void adjustSlaveMotor(int amount) {
-	motor[backRightMotor] -= amount;
-	motor[frontRightMotor] -= amount;
+	motor[backRightMotor] += amount;
+	motor[frontRightMotor] += amount;
 }
 
 int motorStatus;
 int goUntilGlob;
 int leftEncoder;
 int rightEncoder;
+int error;
 void moveStraight(float inches) {
 	int startValue = SensorValue[leftMotorEncoder];
+	int beginError = SensorValue[leftMotorEncoder] - SensorValue[rightMotorEncoder];
 	int goUntil = 180 / 3.14 * (inches / WHEEL_RADIUS / WHEEL_TO_ENCODER_RATIO * WHEEL_FUDGE_FACTOR);
 	goUntilGlob = goUntil;
 	if (inches > 0) {
@@ -45,6 +47,7 @@ void moveStraight(float inches) {
 		locomoteAll(-MOTOR_POWER);
 	}
 
+	wait1Msec(100);
 	while (abs(SensorValue[leftMotorEncoder] - startValue) < abs(goUntil)) {
 		motorStatus = SensorValue[leftMotorEncoder] - startValue;
 		leftEncoder = SensorValue[leftMotorEncoder];
@@ -52,9 +55,9 @@ void moveStraight(float inches) {
 		/*
 			This code (c) 2013 some dudes on the internet
 		*/
-		int error = leftEncoder - rightEncoder;
+		error = leftEncoder - rightEncoder - beginError;
 		adjustSlaveMotor(error * KP);
-		wait1Msec(10);
+		wait1Msec(1);
 	}
 	locomoteAll(0);
 }
