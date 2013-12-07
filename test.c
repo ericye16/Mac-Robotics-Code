@@ -1,11 +1,11 @@
 #pragma config(Sensor, dgtl1,  leftMotorEncoder, sensorRotation)
 #pragma config(Sensor, dgtl2,  rightMotorEncoder, sensorRotation)
 #pragma config(Sensor, dgtl3,  bottomLimitSwitch, sensorTouch)
-#pragma config(Sensor, dgtl4, topLimitSwitch, sensorTouch)
+#pragma config(Sensor, dgtl4,  topLimitSwitch, sensorTouch)
 #pragma config(Motor,  port1,           frontLeftMotor, tmotorServoContinuousRotation, openLoop)
-#pragma config(Motor,  port2,           backLeftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port3,           leftArm1,      tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port4,           leftArm2,      tmotorServoContinuousRotation, openLoop)
+#pragma config(Motor,  port5,           backLeftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port6,           conveyer,      tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port7,           rightArm2,     tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port8,           rightArm1,     tmotorServoContinuousRotation, openLoop)
@@ -38,36 +38,34 @@ int leftEncoder;
 int rightEncoder;
 int error;
 void moveStraight(float inches) {
-	int startValue = SensorValue[leftMotorEncoder];
-	int beginError = SensorValue[leftMotorEncoder] - SensorValue[rightMotorEncoder];
-	int goUntil = 180 / 3.14 * (inches / WHEEL_RADIUS / WHEEL_TO_ENCODER_RATIO * WHEEL_FUDGE_FACTOR);
-	goUntilGlob = goUntil;
 	if (inches > 0) {
 		locomoteAll(MOTOR_POWER);
 	} else {
 		locomoteAll(-MOTOR_POWER);
 	}
 
-	wait1Msec(100);
-	while (abs(SensorValue[leftMotorEncoder] - startValue) < abs(goUntil)) {
-		motorStatus = SensorValue[leftMotorEncoder] - startValue;
-		leftEncoder = SensorValue[leftMotorEncoder];
-		rightEncoder = SensorValue[rightMotorEncoder];
-		/*
-			This code (c) 2013 some dudes on the internet
-		*/
-		error = leftEncoder - rightEncoder - beginError;
-		if (inches < 0) error *= -1;
-		adjustSlaveMotor(error * KP);
-		wait1Msec(1);
-	}
+	wait1Msec(100* inches);
 	locomoteAll(0);
 }
 
+/*void turnRobot (int direction, int power) {
+	motor[backLeftMotor] = power * -direction;
+	motor[frontLeftMotor] = power * -direction;
+	motor[backRightMotor] = power * direction;
+	motor[frontRightMotor] = power * direction;
+}
 
 void turn(int degrees) {
-
-}
+	double wheelDistance = ROBOT_RADIUS * (degrees * PI/180);
+	if (degrees > 0) {
+		turnRobot(1 , MOTOR_POWER);
+	}
+	else if (degrees <= 0) {
+		turnRobot(-1, MOTOR_POWER);
+	}
+	int startValue = SensorValue[leftMotorEncoder];
+	int beginError = SensorValue[leftMotorEncoder] - SensorValue[rightMotorEncoder];
+}*/
 
 void raiseTheFlag() {
 	motor[conveyer] = -50;
@@ -109,13 +107,10 @@ task setArmDown() {
 }
 task main()
 {
-	raiseTheFlag();
+	//raiseTheFlag();
 	startConveyor();
-	//StartTask(setArmUp, 7);
-	moveStraight(50);
-	StartTask(setArmUp, 7);
-	moveStraight(-50);
-	reverseConveyor();
+	moveStraight(20);
+	stopConveyor();
+	locomoteAll(-MOTOR_POWER);
 	while(true);
-
 }
