@@ -110,8 +110,9 @@ task main()
 
 	//raiseTheFlag();
 	startConveyor();
-	moveStraight(30);
+	moveStraight(20);
 	stopConveyor();
 	locomoteAll(-MOTOR_POWER);
-	while(true);
+	wait1Msec(8000);
+	locomoteAll(0);
 }
