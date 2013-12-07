@@ -107,9 +107,10 @@ task setArmDown() {
 }
 task main()
 {
+
 	//raiseTheFlag();
 	startConveyor();
-	moveStraight(20);
+	moveStraight(30);
 	stopConveyor();
 	locomoteAll(-MOTOR_POWER);
 	while(true);
