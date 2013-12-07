@@ -48,24 +48,23 @@ void moveStraight(float inches) {
 	locomoteAll(0);
 }
 
-/*void turnRobot (int direction, int power) {
+void turnRobot (int direction, int power) {
 	motor[backLeftMotor] = power * -direction;
 	motor[frontLeftMotor] = power * -direction;
 	motor[backRightMotor] = power * direction;
 	motor[frontRightMotor] = power * direction;
 }
 
-void turn(int degrees) {
-	double wheelDistance = ROBOT_RADIUS * (degrees * PI/180);
-	if (degrees > 0) {
+void turn(int deciseconds) {
+	if (deciseconds > 0) {
 		turnRobot(1 , MOTOR_POWER);
 	}
-	else if (degrees <= 0) {
+	else if (deciseconds <= 0) {
 		turnRobot(-1, MOTOR_POWER);
 	}
-	int startValue = SensorValue[leftMotorEncoder];
-	int beginError = SensorValue[leftMotorEncoder] - SensorValue[rightMotorEncoder];
-}*/
+	wait1Msec(100*deciseconds);
+	locomoteAll(0);
+}
 
 void raiseTheFlag() {
 	motor[conveyer] = -50;
@@ -114,5 +113,7 @@ task main()
 	stopConveyor();
 	locomoteAll(-MOTOR_POWER);
 	wait1Msec(8000);
+	turn(13);
 	locomoteAll(0);
+	reverseConveyor();
 }
